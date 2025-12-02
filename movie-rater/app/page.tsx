@@ -16,7 +16,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export default function Home() {
   const [movies, setMovies] = useState<movie[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("today");
 
   async function getMovieListToday() {
@@ -85,14 +85,10 @@ export default function Home() {
       </Tabs>
       </div>
       <div className="container mx-auto ">
-        {loading && <p className="text-white text-center">Loading...</p>}
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {movies.length > 0 && (
-          <div className="relative">
-            <div className="pointer-events-none absolute left-0 top-0 h-full w-100 bg-linear-to-r from-black via-black/60 to-transparent z-10"></div>
-            <div className="pointer-events-none absolute right-0 top-0 h-full w-100 bg-linear-to-l from-purple-950 via-purple-950/60 to-transparent z-10"></div>
-            
+          <div className="relative">            
             <Carousel className="w-full max-w-5xl mx-auto">
               <CarouselContent className="-ml-4">
                 {movies.map((movie) => (
@@ -101,8 +97,8 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-20" />
-              <CarouselNext className="bg-transparent text-white z-20" />
+              <CarouselPrevious className="bg-transparent text-white z-30 top-1/3 -left-16" />
+              <CarouselNext className="bg-transparent text-white z-30 top-1/3 -right-16" />
             </Carousel>
           </div>
         )}
