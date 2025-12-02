@@ -1,8 +1,9 @@
 "use client"
-import { useState , useEffect, use } from "react";
+import { useState , useEffect } from "react";
 import { movie, tvShow } from "./types/tmdb";
 import { get } from "./lib/api";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Card from "./components/Card";
 import {
   Carousel,
@@ -193,7 +194,7 @@ export default function Home() {
           </div>
         )}
       </div>
-
+      <Footer />
     </main>
   );
 }
