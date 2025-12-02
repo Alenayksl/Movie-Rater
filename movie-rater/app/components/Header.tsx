@@ -2,7 +2,7 @@ import { LucideVideo, Search} from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="fixed top-0 left-0 w-full px-6 h-14 bg-black text-white flex items-justify gap-6">
+    <header className="fixed top-0 left-0 w-full px-6 h-14 bg-black text-white flex items-justify gap-6 z-50">
     
       
       <div className="flex items-center gap-3">
