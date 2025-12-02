@@ -1,33 +1,83 @@
 "use client"
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import { movie } from "./types/tmdb";
 import { get } from "./lib/api";
 import Header from "./components/Header";
+import Card from "./components/Card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function Home() {
   const [movies, setMovies] = useState<movie[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   async function getMovieList() {
+    setLoading(true);
+    setError(null);
    try {
  const data = await get("/trending/movie/day?language=en-US");
    console.log(data);
    setMovies(data.results);
     } catch (error) {
       console.error(error);
+      setError("Failed to fetch movies.");
+    } finally {
+      setLoading(false);
     }
   }
+
+  useEffect(() => {
+    getMovieList();
+  }, []);
   
     return (
-    <main className="bg-gradient-to-r from-black to-purple-950 flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="bg-gradient-to-r from-black to-purple-950 min-h-screen pt-20 px-6">
       <Header />
-      <button onClick={getMovieList}>get Movie List</button>
-      <div>
-        {movies.map((movie) => (
-          <div key={movie.id}>
-            <h2>{movie.title}</h2>
-            <p>{movie.overview}</p>
+      <Tabs defaultValue="trending">
+        <TabsList className="justify-center mb-8 bg-gray-900 border border-purple-700 rounded-full p-1">
+          <TabsTrigger 
+            className="text-gray-400 hover:text-white rounded-full data-[state=active]:bg-purple-800 data-[state=active]:text-white transition-all px-6 py-2" 
+            value="trending"
+          >
+            Today
+          </TabsTrigger>
+          <TabsTrigger 
+            className="text-gray-400 hover:text-white rounded-full data-[state=active]:bg-purple-800 data-[state=active]:text-white transition-all px-6 py-2" 
+            value="popular"
+          >
+            This Week
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+      <div className="container mx-auto mt-10">
+        {loading && <p className="text-white text-center">Loading...</p>}
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        
+        {movies.length > 0 && (
+          <div className="relative">
+            <div className="pointer-events-none absolute left-0 top-0 h-full w-100 bg-gradient-to-r from-black via-black/60 to-transparent z-10"></div>
+            <div className="pointer-events-none absolute right-0 top-0 h-full w-100 bg-gradient-to-l from-purple-950 via-purple-950/60 to-transparent z-10"></div>
+            
+            <Carousel className="w-full max-w-5xl mx-auto">
+              <CarouselContent className="-ml-4">
+                {movies.map((movie) => (
+                  <CarouselItem key={movie.id} className="lg:basis-1/6 md:basis-1/4 sm:basis-1/3 basis-1/2 p-4">
+                    <Card movie={movie} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="bg-transparent text-white z-20" />
+              <CarouselNext className="bg-transparent text-white z-20" />
+            </Carousel>
           </div>
-        ))}
+        )}
       </div>
     </main>
   );
