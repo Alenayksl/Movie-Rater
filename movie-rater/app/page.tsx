@@ -11,14 +11,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function Home() {
   const [movies, setMovies] = useState<movie[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("today");
 
-  async function getMovieList() {
+  async function getMovieListToday() {
     setLoading(true);
     setError(null);
    try {
@@ -33,37 +34,64 @@ export default function Home() {
     }
   }
 
+  async function getMovieListThisWeek() {
+    setLoading(true);
+    setError(null);
+   try {
+ const data = await get("/trending/movie/week?language=en-US");
+   console.log(data);
+   setMovies(data.results);
+    } catch (error) {
+      console.error(error);
+      setError("Failed to fetch movies.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleTabChange(value: string) {
+    setActiveTab(value);
+    if (value === "today") {
+      getMovieListToday();
+    } else if (value === "this_week") {
+      getMovieListThisWeek();
+    }
+  } 
+
   useEffect(() => {
-    getMovieList();
+    getMovieListToday();
   }, []);
   
     return (
-    <main className="bg-gradient-to-r from-black to-purple-950 min-h-screen pt-20 px-6">
+    <main className="bg-linear-to-r from-black to-purple-950 min-h-screen pt-20 px-6">
       <Header />
-      <Tabs defaultValue="trending">
+
+      <div className="mr-auto ml-auto mt-5 w-full max-w-5xl">
+      <Tabs defaultValue={activeTab} onValueChange={handleTabChange}>
         <TabsList className="justify-center mb-8 bg-gray-900 border border-purple-700 rounded-full p-1">
           <TabsTrigger 
             className="text-gray-400 hover:text-white rounded-full data-[state=active]:bg-purple-800 data-[state=active]:text-white transition-all px-6 py-2" 
-            value="trending"
+            value="today"
           >
             Today
           </TabsTrigger>
           <TabsTrigger 
             className="text-gray-400 hover:text-white rounded-full data-[state=active]:bg-purple-800 data-[state=active]:text-white transition-all px-6 py-2" 
-            value="popular"
+            value="this_week"
           >
             This Week
           </TabsTrigger>
         </TabsList>
       </Tabs>
-      <div className="container mx-auto mt-10">
+      </div>
+      <div className="container mx-auto ">
         {loading && <p className="text-white text-center">Loading...</p>}
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {movies.length > 0 && (
           <div className="relative">
-            <div className="pointer-events-none absolute left-0 top-0 h-full w-100 bg-gradient-to-r from-black via-black/60 to-transparent z-10"></div>
-            <div className="pointer-events-none absolute right-0 top-0 h-full w-100 bg-gradient-to-l from-purple-950 via-purple-950/60 to-transparent z-10"></div>
+            <div className="pointer-events-none absolute left-0 top-0 h-full w-100 bg-linear-to-r from-black via-black/60 to-transparent z-10"></div>
+            <div className="pointer-events-none absolute right-0 top-0 h-full w-100 bg-linear-to-l from-purple-950 via-purple-950/60 to-transparent z-10"></div>
             
             <Carousel className="w-full max-w-5xl mx-auto">
               <CarouselContent className="-ml-4">
