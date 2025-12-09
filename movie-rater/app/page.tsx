@@ -5,6 +5,7 @@ import { get } from "./lib/api";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Card from "./components/Card";
+import VideoCard from "./components/VideoCard";
 import {
   Carousel,
   CarouselContent,
@@ -226,26 +227,13 @@ export default function Home() {
             <Carousel className="w-full max-w-5xl mx-auto">
               <CarouselContent className="-ml-4">
                 {videos.map((video) => (
-                  <CarouselItem key={video.id} className="lg:basis-1/6 md:basis-1/4 sm:basis-1/3 basis-1/2 p-4">
-                    <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-                      <iframe
-                        className="w-full h-48"
-                        src={`https://www.youtube.com/embed/${video.key}`}
-                        title={video.name}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
-                      <div className="p-4">
-                        <h2 className="text-white text-lg font-bold mb-2">{video.movieTitle}</h2>
-                        <p className="text-gray-400 text-sm">{video.name}</p>
-                      </div>
-                    </div>
+                  <CarouselItem key={video.id} className="lg:basis-1/3 md:basis-1/2 basis-1 p-4">
+                    <VideoCard video={video} />
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/3 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/3 -right-16" />
+              <CarouselPrevious className="bg-transparent text-white z-30 top-1/2 -left-16" />
+              <CarouselNext className="bg-transparent text-white z-30 top-1/2 -right-16" />
             </Carousel>
           </div>
         )}
