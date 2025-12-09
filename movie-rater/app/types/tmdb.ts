@@ -15,3 +15,18 @@ export interface tvShow {
     first_air_date: string;
     vote_average: number;
 }
+
+export interface video {
+    id: string;
+    name: string;
+    key: string;
+    site: string;
+    type: string;
+}
+
+export interface celeb {
+    id: number;
+    name: string;
+    profile_path: string;
+    known_for_department: string;
+}
