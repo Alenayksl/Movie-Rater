@@ -15,3 +15,11 @@ export interface tvShow {
     first_air_date: string;
     vote_average: number;
 }
+
+export interface video {
+    id: string;
+    name: string;
+    key: string;
+    site: string;
+    type: string;
+}
