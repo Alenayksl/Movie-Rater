@@ -1,5 +1,5 @@
 import { video } from "../types/tmdb";
-import { Play, Film } from "lucide-react";
+import { Film } from "lucide-react";
 
 interface VideoCardProps {
   video: video & { movieTitle: string; movieId: number };

@@ -1,11 +1,12 @@
 "use client"
 import { useState , useEffect } from "react";
-import { movie, tvShow, video } from "./types/tmdb";
+import { movie, tvShow, video,  celeb } from "./types/tmdb";
 import { get } from "./lib/api";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Card from "./components/Card";
 import VideoCard from "./components/VideoCard";
+import CelebCard from "./components/CelebCard";
 import {
   Carousel,
   CarouselContent,
@@ -22,6 +23,22 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("today");
   const [tvShows, setTvShows] = useState<tvShow[]>([]);
   const [videos, setVideos] = useState<(video & { movieTitle: string; movieId: number })[]>([]);
+  const [celebs, setCelebs] = useState<celeb[]>([]);
+
+  async function getCelebs() {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await get("/trending/person/day?language=en-US");
+      console.log(data);
+      setCelebs(data.results);
+    } catch (error) {
+      console.error(error);
+      setError("Failed to fetch celebs.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function getVideosForMovies(movies: movie[]) {
     setLoading(true);
@@ -196,13 +213,18 @@ export default function Home() {
     }
   }, [movies]);
 
+  useEffect(() => {
+    getCelebs();
+  }, []);
+
   return (
     <main className="min-h-screen pt-20 px-6">
       <Header />
-
- <div className="mr-auto ml-auto mt-16 w-full max-w-5xl">
+<div style = {{backgroundImage: 'url(/icons/video-background.png)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+{/* self note: video-background video alanında background olarak kullanılacak. */}
+ <div className="mr-auto ml-auto mt-5 w-full max-w-5xl">
         <h1 className="text-white text-3xl font-bold mb-4">Trending Trailers</h1>
-        <Tabs defaultValue={activeTab} onValueChange={handleVideosTabChange}>
+        <Tabs defaultValue="movies" onValueChange={handleVideosTabChange}>
           <TabsList className="justify-center mb-8 bg-gray-900 border border-purple-700 rounded-full p-1">
             <TabsTrigger 
               className="text-gray-400 hover:text-white rounded-full data-[state=active]:bg-purple-800 data-[state=active]:text-white transition-all px-6 py-2" 
@@ -237,6 +259,7 @@ export default function Home() {
             </Carousel>
           </div>
         )}
+      </div>
       </div>
 
       <div className="mr-auto ml-auto mt-5 w-full max-w-5xl">
@@ -319,6 +342,29 @@ export default function Home() {
               </CarouselContent>
               <CarouselPrevious className="bg-transparent text-white z-30 top-1/3 -left-16" />
               <CarouselNext className="bg-transparent text-white z-30 top-1/3 -right-16" />
+            </Carousel>
+          </div>
+        )}
+      </div>
+
+      <div className="mr-auto ml-auto mt-16 w-full max-w-5xl">
+        <h1 className="text-white text-3xl font-bold mb-4">Popular Celebrities</h1>
+      </div>
+      <div className="container mx-auto mb-16">
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        
+        {celebs.length > 0 && (
+          <div className="relative">            
+            <Carousel className="w-full max-w-5xl mx-auto">
+              <CarouselContent className="-ml-4">
+                {celebs.map((celeb) => (
+                  <CarouselItem key={celeb.id} className="lg:basis-1/6 md:basis-1/5 sm:basis-1/4 basis-1/3 p-4">
+                    <CelebCard celeb={celeb} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="bg-transparent text-white z-30 top-1/2 -left-16" />
+              <CarouselNext className="bg-transparent text-white z-30 top-1/2 -right-16" />
             </Carousel>
           </div>
         )}

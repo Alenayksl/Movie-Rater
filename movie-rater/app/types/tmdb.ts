@@ -23,3 +23,10 @@ export interface video {
     site: string;
     type: string;
 }
+
+export interface celeb {
+    id: number;
+    name: string;
+    profile_path: string;
+    known_for_department: string;
+}
