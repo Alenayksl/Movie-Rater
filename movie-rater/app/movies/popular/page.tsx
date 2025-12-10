@@ -5,19 +5,24 @@ import Card from "@/app/components/Card";
 import { useState, useEffect } from "react";
 import { movie } from "@/app/types/tmdb";
 import { get } from "@/app/lib/api";
+import Pagination from "@/app/components/Pagination";
 
 export default function PopularMoviesPage() {
   const [movies, setMovies] = useState<movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  async function getPopularMovies() {
+  async function getPopularMovies(page: number) {
     setLoading(true);
     setError(null);
+    
     try {
-      const data = await get("/movie/popular?language=en-US&page=1");
+      const data = await get(`/movie/popular?language=en-US&page=${page}`);
       console.log(data);
       setMovies(data.results);
+      setTotalPages(data.total_pages > 500 ? 500 : data.total_pages); 
     } catch (error) {
       console.error(error);
       setError("Failed to fetch popular movies");
@@ -26,8 +31,14 @@ export default function PopularMoviesPage() {
     }
   }
 
+  function handlePageChange(page: number) {
+    setCurrentPage(page);
+    getPopularMovies(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   useEffect(() => {
-    getPopularMovies();
+    getPopularMovies(1);
   }, []);
 
   return (
@@ -40,13 +51,24 @@ export default function PopularMoviesPage() {
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {movies.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            {movies.map((movie) => (
-              <Card key={movie.id} movie={movie} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 mb-8">
+              {movies.map((movie) => (
+                <Card key={movie.id} movie={movie} />
+              ))}
+            </div>
+            
+            <div className="flex justify-center my-8">
+              <Pagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          </>
         )}
       </div>
+      
       <Footer />
     </main>
   );
