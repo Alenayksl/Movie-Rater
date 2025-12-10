@@ -1,12 +1,14 @@
 "use client"
 import { useState , useEffect } from "react";
-import { movie, tvShow, video,  celeb } from "./types/tmdb";
+import { movie, tvShow, video,  celeb, reviews } from "./types/tmdb";
 import { get } from "./lib/api";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Card from "./components/Card";
 import VideoCard from "./components/VideoCard";
 import CelebCard from "./components/CelebCard";
+import ReviewsCard from "./components/ReviewsCard";
+
 import {
   Carousel,
   CarouselContent,
@@ -24,6 +26,43 @@ export default function Home() {
   const [tvShows, setTvShows] = useState<tvShow[]>([]);
   const [videos, setVideos] = useState<(video & { movieTitle: string; movieId: number })[]>([]);
   const [celebs, setCelebs] = useState<celeb[]>([]);
+  const [reviews, setReviews] = useState<reviews[]>([]);
+
+  async function getReviews() {
+    setLoading(true);
+    setError(null);
+    try {
+      const reviewsPromises = movies.slice(0, 10).map(async (movie) => {
+        try {
+          const data = await get(`/movie/${movie.id}/reviews?language=en-US&page=1`);
+          // Her review'a film bilgilerini ekle
+          return (data.results || []).map((review: reviews) => ({
+            ...review,
+            movieTitle: movie.title,
+            moviePosterPath: movie.poster_path
+          }));
+        } catch (error) {
+          console.error(`Failed to fetch reviews for movie ${movie.id}`, error);
+          return [];
+        }
+      });
+
+      const allReviewsArrays = await Promise.all(reviewsPromises);
+      const allReviews = allReviewsArrays.flat();
+      
+      const sortedReviews = allReviews.sort((a, b) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+      const topReviews = sortedReviews.slice(0, 10);
+      console.log(topReviews);
+      setReviews(topReviews);
+    } catch (error) {
+      console.error(error);
+      setError("Failed to fetch reviews.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function getCelebs() {
     setLoading(true);
@@ -217,6 +256,12 @@ export default function Home() {
     getCelebs();
   }, []);
 
+  useEffect(() => {
+    if (movies.length > 0) {
+      getReviews();
+    }
+  }, [movies]);
+
   return (
     <main className="min-h-screen pt-20 px-6">
       <Header />
@@ -369,6 +414,29 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      <div className="mr-auto ml-auto mt-16 w-full max-w-5xl">
+        <h1 className="text-white text-3xl font-bold mb-4">Latest Reviews</h1>
+      </div>
+      <div className="container mx-auto mb-16">
+        {error && <p className="text-red-500 text-center">{error}</p>} 
+        {reviews.length > 0 && (
+          <div className="relative">            
+            <Carousel className="w-full max-w-5xl mx-auto">
+              <CarouselContent className="-ml-4">
+                {reviews.map((review) => (
+                  <CarouselItem key={review.id} className="lg:basis-1/3 md:basis-1/2 basis-1 p-4">
+                    <ReviewsCard review={review} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="bg-transparent text-white z-30 top-1/2 -left-16" />
+              <CarouselNext className="bg-transparent text-white z-30 top-1/2 -right-16" />
+            </Carousel>
+          </div>
+        )}
+      </div>
+        
 
       <Footer />
 

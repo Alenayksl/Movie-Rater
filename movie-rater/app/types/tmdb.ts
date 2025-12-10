@@ -30,3 +30,18 @@ export interface celeb {
     profile_path: string;
     known_for_department: string;
 }
+
+export interface reviews {
+    id: string; 
+    author: string;
+    author_details: {
+        username: string;
+        avatar_path: string | null;
+        rating: number | null;
+    };
+    content: string;
+    url: string;
+    created_at: string;
+    movieTitle?: string;
+    moviePosterPath?: string;
+}
