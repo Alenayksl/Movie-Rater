@@ -1,5 +1,3 @@
-
-
 import { LucideVideo, Search, ChevronDown} from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
@@ -33,21 +31,18 @@ export default function Header() {
             onMouseEnter={() => setIsMoviesOpen(true)}
             onMouseLeave={() => setIsMoviesOpen(false)}
           >
-             <button className="w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors"
-              >
-                <Link href="/movies/popular">
+             <Link href="/movies/popular" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
                 Popular
-                </Link>
-              </button>
-              <button className="w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+              </Link>
+              <Link href="/movies/toprated" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
                 Top Rated
-              </button>
-              <button className="w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+              </Link>
+              <Link href="/movies/upcoming" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
                 Upcoming
-              </button>
-              <button className="w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+              </Link>
+              <Link href="/movies/nowplaying" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
                 Now Playing
-              </button>
+              </Link>
           </div>
         )}
         </div>
