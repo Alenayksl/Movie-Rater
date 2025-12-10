@@ -42,4 +42,6 @@ export interface reviews {
     content: string;
     url: string;
     created_at: string;
+    movieTitle?: string;
+    moviePosterPath?: string;
 }

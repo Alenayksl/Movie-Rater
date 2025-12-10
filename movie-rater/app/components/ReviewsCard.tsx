@@ -12,13 +12,38 @@ export default function ReviewsCard({ review }: ReviewsCardProps) {
       : `https://image.tmdb.org/t/p/w200${review.author_details.avatar_path}`
     : null;
 
+  const posterUrl = review.moviePosterPath
+    ? `https://image.tmdb.org/t/p/w200${review.moviePosterPath}`
+    : null;
+
   return (
-    <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 to-gray-950 shadow-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/30 h-full">
+    <div className="group relative overflow-hidden rounded-xl bg-linear-to-br from-gray-900 to-gray-950 shadow-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/30 h-full flex flex-col">
+      {/* Movie Poster and Title */}
+      {review.movieTitle && (
+        <div className="relative h-48 overflow-hidden">
+          {posterUrl ? (
+            <img
+              src={posterUrl}
+              alt={review.movieTitle}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-linear-to-br from-purple-900 to-gray-900 flex items-center justify-center">
+              <span className="text-white text-lg font-bold">{review.movieTitle}</span>
+            </div>
+          )}
+          <div className="absolute inset-0 bg-linear-to-t from-gray-900 via-gray-900/80 to-transparent" />
+          <h2 className="absolute bottom-3 left-3 right-3 text-white font-bold text-lg line-clamp-2">
+            {review.movieTitle}
+          </h2>
+        </div>
+      )}
+
       {/* Header with Avatar and Author */}
       <div className="p-4 border-b border-gray-800">
         <div className="flex items-start gap-3">
           {/* Avatar */}
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             {avatarUrl ? (
               <img
                 src={avatarUrl}
@@ -26,7 +51,7 @@ export default function ReviewsCard({ review }: ReviewsCardProps) {
                 className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-500/50"
               />
             ) : (
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center">
                 <User className="w-6 h-6 text-white" />
               </div>
             )}
@@ -52,10 +77,10 @@ export default function ReviewsCard({ review }: ReviewsCardProps) {
       </div>
 
       {/* Review Content */}
-      <div className="p-4 space-y-3">
+      <div className="p-4 space-y-3 flex-1">
         <div className="flex items-start gap-2">
-          <MessageSquare className="w-4 h-4 text-purple-400 mt-1 flex-shrink-0" />
-          <p className="text-gray-300 text-sm leading-relaxed line-clamp-6">
+          <MessageSquare className="w-4 h-4 text-purple-400 mt-1 shrink-0" />
+          <p className="text-gray-300 text-sm leading-relaxed line-clamp-4">
             {review.content}
           </p>
         </div>

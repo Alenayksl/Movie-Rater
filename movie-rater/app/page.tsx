@@ -35,7 +35,12 @@ export default function Home() {
       const reviewsPromises = movies.slice(0, 10).map(async (movie) => {
         try {
           const data = await get(`/movie/${movie.id}/reviews?language=en-US&page=1`);
-          return data.results;
+          // Her review'a film bilgilerini ekle
+          return (data.results || []).map((review: reviews) => ({
+            ...review,
+            movieTitle: movie.title,
+            moviePosterPath: movie.poster_path
+          }));
         } catch (error) {
           console.error(`Failed to fetch reviews for movie ${movie.id}`, error);
           return [];
