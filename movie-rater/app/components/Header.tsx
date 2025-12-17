@@ -1,12 +1,14 @@
 import { LucideVideo, Search, ChevronDown} from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import { link } from "fs";
 
 export default function Header() {
 
   const[isMoviesOpen, setIsMoviesOpen] = useState(false);
   const[isTvOpen, setIsTvOpen] = useState(false);
   const[isCelebsOpen, setIsCelebsOpen] = useState(false);
+  
 
   return (
     <header className="fixed top-0 left-0 w-full px-6 h-14 bg-black text-white flex items-justify gap-6 z-50">
@@ -14,7 +16,9 @@ export default function Header() {
       
       <div className="flex items-center gap-3">
         <LucideVideo className="text-purple-600" />
-        <span className="font-semibold">CineBook</span>
+        <span className="font-semibold hover:text-purple-600 cursor-pointer"
+        onClick={() => window.location.href = '/'}
+        >CineBook</span>
       </div>
 
      
