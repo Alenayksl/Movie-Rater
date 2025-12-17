@@ -1,10 +1,14 @@
 import { LucideVideo, Search, ChevronDown} from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import { link } from "fs";
 
 export default function Header() {
 
   const[isMoviesOpen, setIsMoviesOpen] = useState(false);
+  const[isTvOpen, setIsTvOpen] = useState(false);
+  const[isCelebsOpen, setIsCelebsOpen] = useState(false);
+  
 
   return (
     <header className="fixed top-0 left-0 w-full px-6 h-14 bg-black text-white flex items-justify gap-6 z-50">
@@ -12,7 +16,9 @@ export default function Header() {
       
       <div className="flex items-center gap-3">
         <LucideVideo className="text-purple-600" />
-        <span className="font-semibold">CineBook</span>
+        <span className="font-semibold hover:text-purple-600 cursor-pointer"
+        onClick={() => window.location.href = '/'}
+        >CineBook</span>
       </div>
 
      
@@ -47,8 +53,54 @@ export default function Header() {
         )}
         </div>
 
-        <button className="hover:text-gray-300">TV Shows</button>
-        <button className="hover:text-gray-300">Celebs</button>
+        <div className="relative">
+        <button className="hover:text-gray-300 flex items-center gap-1"
+        onMouseEnter={() => setIsTvOpen(true)}
+        onMouseLeave={() => setIsTvOpen(false)}
+        >TV Shows  <ChevronDown size={16} className={`transition-transform ${isTvOpen ? 'rotate-180' : ''}`} /></button>
+        {isTvOpen && (
+          <div 
+            className="absolute top-full left-0 mt-2 w-40 bg-gray-800 rounded-md shadow-lg py-2 z-10"
+            onMouseEnter={() => setIsTvOpen(true)}
+            onMouseLeave={() => setIsTvOpen(false)}
+          >
+             <Link href="/tv/popular" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+                Popular
+              </Link>
+              <Link href="/tv/toprated" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+                Top Rated
+              </Link>
+              <Link href="/tv/ontheair" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+                On The Air
+              </Link>
+              <Link href="/tv/airingtoday" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+                Airing Today
+              </Link>
+          </div>
+        )}
+        </div>
+
+        <div className="relative">
+        <button className="hover:text-gray-300 flex items-center gap-1"
+        onMouseEnter={() => setIsCelebsOpen(true)}
+        onMouseLeave={() => setIsCelebsOpen(false)}
+
+        >Celebs <ChevronDown size={16} className={`transition-transform ${isCelebsOpen ? 'rotate-180' : ''}`} /></button>
+        {isCelebsOpen && (
+          <div 
+            className="absolute top-full left-0 mt-2 w-40 bg-gray-800 rounded-md shadow-lg py-2 z-10"
+            onMouseEnter={() => setIsCelebsOpen(true)}
+            onMouseLeave={() => setIsCelebsOpen(false)}
+          >
+              <Link href="/celebs/popular" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+                Popular
+              </Link>
+          </div>
+        )}
+        </div>
+
+
+
         <button className="hover:text-gray-300">More</button>
       </div>
       

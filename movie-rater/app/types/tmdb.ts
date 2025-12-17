@@ -29,6 +29,7 @@ export interface celeb {
     name: string;
     profile_path: string;
     known_for_department: string;
+    known_for: Array<movie | tvShow>;
 }
 
 export interface reviews {
