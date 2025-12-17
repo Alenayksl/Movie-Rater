@@ -6,8 +6,15 @@ import { useState, useEffect } from "react";
 import { movie } from "@/app/types/tmdb";
 import { get } from "@/app/lib/api";
 import Pagination from "@/app/components/Pagination";
+import Filter from "@/app/components/MoviesFilter";
+import { s } from "framer-motion/client";
 
 export default function PopularMoviesPage() {
+
+  const [filters, setFilters] = useState({
+    
+  });
+
   const [movies, setMovies] = useState<movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,12 +46,17 @@ export default function PopularMoviesPage() {
 
   useEffect(() => {
     getPopularMovies(1);
-  }, []);
+  }, [filters]);
 
   return (
     <main className="min-h-screen pt-20 px-6">
       <Header />
       <div className="container mx-auto">
+        <Filter onFilterChange={setFilters}>
+          
+        </Filter>
+
+
         <h1 className="text-3xl font-bold text-white mb-6">Popular Movies</h1>
         
         {loading && <p className="text-white text-center">Loading...</p>}

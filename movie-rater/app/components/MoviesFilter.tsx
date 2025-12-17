@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -13,6 +13,7 @@ import {
 } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
+import { on } from 'events'
 
 const sortOptions = [
 { name: 'Popularity: High to Low', value: 'popularity.desc' },
@@ -122,14 +123,46 @@ const filters = [
   }
 ]
 
-
+interface FilterProps {
+  onFilterChange?: (filters: {
+     genres: string[];
+    sortBy: string;
+    year?: string;
+  }) => void;
+}
 
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Filter() {
+export default function Filter({ onFilterChange }: FilterProps) {
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
+  const [selectedYear, setSelectedYear] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    onFilterChange?.({
+      genres: selectedGenres,
+      sortBy: selectedSort,
+      year: selectedYear,
+    });
+  }, [selectedGenres, selectedSort, selectedYear, onFilterChange]);
+
+  const handleGenreChange = (genreId: string, checked: boolean) => {
+    setSelectedGenres((prevGenres) => {
+      if (checked) {
+        return [...prevGenres, genreId];
+      } else {
+        return prevGenres.filter((id) => id !== genreId);
+      }
+    });
+  };
+
+  const handleSortChange = (sortOption: string) => {
+    setSelectedSort(sortOption);
+  };
+
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   return (
     <div className="bg-gray-900">
