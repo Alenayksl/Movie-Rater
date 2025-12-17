@@ -5,6 +5,7 @@ import Link from "next/link";
 export default function Header() {
 
   const[isMoviesOpen, setIsMoviesOpen] = useState(false);
+  const[isTvOpen, setIsTvOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 w-full px-6 h-14 bg-black text-white flex items-justify gap-6 z-50">
@@ -47,7 +48,32 @@ export default function Header() {
         )}
         </div>
 
-        <button className="hover:text-gray-300">TV Shows</button>
+        <div className="relative">
+        <button className="hover:text-gray-300 flex items-center gap-1"
+        onMouseEnter={() => setIsTvOpen(true)}
+        onMouseLeave={() => setIsTvOpen(false)}
+        >TV Shows  <ChevronDown size={16} className={`transition-transform ${isTvOpen ? 'rotate-180' : ''}`} /></button>
+        {isTvOpen && (
+          <div 
+            className="absolute top-full left-0 mt-2 w-40 bg-gray-800 rounded-md shadow-lg py-2 z-10"
+            onMouseEnter={() => setIsTvOpen(true)}
+            onMouseLeave={() => setIsTvOpen(false)}
+          >
+             <Link href="/tv/popular" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+                Popular
+              </Link>
+              <Link href="/tv/toprated" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+                Top Rated
+              </Link>
+              <Link href="/tv/ontheair" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+                On The Air
+              </Link>
+              <Link href="/tv/airingtoday" className="block w-full text-left px-4 py-2 hover:bg-purple-800 transition-colors">
+                Airing Today
+              </Link>
+          </div>
+        )}
+        </div>
         <button className="hover:text-gray-300">Celebs</button>
         <button className="hover:text-gray-300">More</button>
       </div>
