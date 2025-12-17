@@ -6,39 +6,42 @@ interface CelebInfoCardProps {
 
 export default function CelebInfoCard({ celeb }: CelebInfoCardProps) {
   return (
-    <div className="flex flex-col items-center group cursor-pointer">
-        <div className="relative w-32 h-32 rounded-full overflow-hidden shadow-xl transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/50">
+    <div className="group relative overflow-hidden rounded-lg bg-gray-900 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
+      <div className="relative overflow-hidden">
         {celeb.profile_path ? (
           <img
-            src={`https://image.tmdb.org/t/p/w200${celeb.profile_path}`}
+            src={`https://image.tmdb.org/t/p/w500${celeb.profile_path}`}
             alt={celeb.name}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            className="w-full h-[225px] object-cover transition-transform duration-300 group-hover:scale-110"
           />
         ) : (
-          <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+          <div className="w-full h-[225px] bg-gray-800 flex items-center justify-center">
             <span className="text-gray-600">No Image</span>
-            </div>
+          </div>
         )}
-        <div className="absolute inset-0 rounded-full border-4 border-transparent group-hover:border-purple-500/60 transition-all duration-300" />
+
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
-        <div className="mt-3 text-center max-w-[140px]">
-        <h3 className="text-white font-semibold text-sm line-clamp-2 group-hover:text-purple-400 transition-colors duration-300">
+      <div className="p-3">
+        <h2 className="text-white font-semibold text-sm line-clamp-2 mb-1 min-h-10">
           {celeb.name}
-        </h3>
-
-        <div className="mt-1">
-          {celeb.known_for.map((work, index) => (
-            <p key={index} className="text-gray-400 text-xs">
+        </h2>
+        
+        <div className="mb-1">
+          {celeb.known_for.slice(0, 2).map((work, index) => (
+            <p key={index} className="text-gray-400 text-xs line-clamp-1">
               {"title" in work ? work.title : work.name}
             </p>
           ))}
         </div>
 
-        <p className="text-gray-400 text-xs mt-1">
+        <p className="text-gray-400 font-semibold text-xs">
           {celeb.known_for_department}
         </p>
-        </div>  
+      </div>
+
+      <div className="absolute inset-0 rounded-lg border-2 border-purple-600/0 group-hover:border-purple-600/50 transition-all duration-300" />
     </div>
   );
 }
