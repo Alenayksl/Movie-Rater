@@ -118,6 +118,7 @@ export default function TopRatedPage() {
     <main className="min-h-screen bg-gray-950">
       <Header />
       <MoviesFilter
+        title="Top Rated Movies"
               selectedGenres={selectedGenres}
               selectedPlatforms={selectedPlatforms}
               selectedCountry={selectedCountry}

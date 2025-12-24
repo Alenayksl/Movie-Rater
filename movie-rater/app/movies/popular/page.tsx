@@ -116,6 +116,7 @@ export default function PopularMoviesPage() {
     <main className="min-h-screen bg-gray-950">
       <Header />
       <MoviesFilter
+        title="Popular Movies"
         selectedGenres={selectedGenres}
         selectedPlatforms={selectedPlatforms}
         selectedCountry={selectedCountry}

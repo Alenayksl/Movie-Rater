@@ -108,6 +108,7 @@ const filters = [
 ]
 
 interface MoviesFilterProps {
+  title: string;
   children: React.ReactNode;
   selectedGenres: number[];
   selectedPlatforms: number[];
@@ -124,6 +125,7 @@ interface MoviesFilterProps {
 }
 
 export default function Filter({
+  title,
   children,
   selectedGenres,
   selectedPlatforms,
@@ -262,7 +264,7 @@ export default function Filter({
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-700 pt-24 pb-6">
-            <h1 className="text-4xl font-bold tracking-tight text-white">Popular Movies</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-white">{title}</h1>
 
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
