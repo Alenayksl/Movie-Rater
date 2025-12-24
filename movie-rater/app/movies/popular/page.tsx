@@ -23,6 +23,8 @@ export default function PopularMoviesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  const hasFilters = selectedGenres.length > 0 || selectedPlatforms.length > 0 || selectedCountry || selectedLanguage || selectedYear || sortBy !== "popularity.desc";
+
   const getPopularMovies = useCallback(async (page: number) => {
     setLoading(true);
     setError(null);
@@ -30,10 +32,13 @@ export default function PopularMoviesPage() {
     const params = new URLSearchParams({
       page: page.toString(),
       language: selectedLanguage ?? "en-US",
-      sort_by: sortBy,
     });
 
-    if (selectedGenres.length > 0) {
+    let endPoint = "";
+
+    if (hasFilters) {
+      params.append("sort_by", sortBy);
+      if (selectedGenres.length > 0) {
       params.append("with_genres", selectedGenres.join(","));
     }
     if (selectedPlatforms.length > 0) {
@@ -43,9 +48,20 @@ export default function PopularMoviesPage() {
     if (selectedYear) {
       params.append("primary_release_year", selectedYear.toString());
     }
-    
-    try {
-      const data = await get(`/movie/popular?${params.toString()}`);
+    if (selectedCountry) {
+      params.append("region", selectedCountry);
+    }
+  if (selectedLanguage) {
+    params.append("with_original_language", selectedLanguage);
+  }
+
+    endPoint = `/discover/movie?${params.toString()}`;
+  } else {
+    endPoint = `/movie/popular?page=${page}&language=${selectedLanguage ?? "en-US"}`;
+  }
+
+  try {
+      const data = await get(endPoint);
       console.log(data);
       setMovies(data.results);
       setTotalPages(data.total_pages > 500 ? 500 : data.total_pages); 
@@ -55,7 +71,7 @@ export default function PopularMoviesPage() {
     } finally {
       setLoading(false);
     }
-  }, [selectedGenres, selectedPlatforms, selectedCountry, selectedLanguage, selectedYear, sortBy]);
+  }, [selectedLanguage, hasFilters, sortBy, selectedGenres, selectedPlatforms, selectedYear, selectedCountry]);
 
   function handleGenreChange(genreId: number, checked: boolean) {
     setSelectedGenres(prev =>
