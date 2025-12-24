@@ -25,13 +25,6 @@ const sortOptions = [
   { name: 'Rating: Low to High', value: 'vote_average.asc' },
 ]
 
-const subCategories = [
-  { name: 'All Movies', href: '#' },
-  { name: 'Popular', href: '#' },
-  { name: 'Top Rated', href: '#' },
-  { name: 'Upcoming', href: '#' },
-  { name: 'Now Playing', href: '#' },
-]
 
 const filters = [
   {
@@ -177,16 +170,6 @@ export default function Filter({
 
               {/* Filters */}
               <form className="mt-4 border-t border-gray-700">
-                <h3 className="sr-only">Categories</h3>
-                <ul role="list" className="px-2 py-3 font-medium text-white">
-                  {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a href={category.name} className="block px-2 py-3 hover:text-gray-300">
-                        {category.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
 
                 {filters.map((section) => (
                   <Disclosure key={section.id} as="div" className="border-t border-gray-700 px-4 py-6">
@@ -316,10 +299,6 @@ export default function Filter({
                 </MenuItems>
               </Menu>
 
-              <button type="button" className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-300 sm:ml-7">
-                <span className="sr-only">View grid</span>
-                <Squares2X2Icon aria-hidden="true" className="size-5" />
-              </button>
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(true)}
@@ -339,15 +318,6 @@ export default function Filter({
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               {/* Filters */}
               <form className="hidden lg:block">
-                <h3 className="sr-only">Categories</h3>
-                <ul role="list" className="space-y-4 border-b border-gray-700 pb-6 text-sm font-medium text-white">
-                  {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a href={category.href} className="hover:text-gray-300">{category.name}</a>
-                    </li>
-                  ))}
-                </ul>
-
                 {filters.map((section) => (
                   <Disclosure key={section.id} as="div" className="border-b border-gray-700 py-6">
                     <h3 className="-my-3 flow-root">
