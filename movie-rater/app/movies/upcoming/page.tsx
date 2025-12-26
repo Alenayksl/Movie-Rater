@@ -67,7 +67,7 @@ export default function UpcomingPage() {
         }
         catch (error) {
           console.error(error);
-          setError("Failed to fetch now playing movies");
+          setError("Failed to fetch upcoming movies");
         }
         finally {
           setLoading(false);
