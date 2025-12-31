@@ -5,6 +5,7 @@ export interface movie {
     poster_path: string;
     release_date: string;
     vote_average: number;
+    genres: { id: number; name: string; }[];
 }
 
 export interface tvShow {
@@ -32,6 +33,11 @@ export interface celeb {
     known_for: Array<movie | tvShow>;
 }
 
+export interface CreditCast extends celeb {
+  character: string;
+  order: number;
+}
+
 export interface reviews {
     id: string; 
     author: string;
@@ -46,3 +52,42 @@ export interface reviews {
     movieTitle?: string;
     moviePosterPath?: string;
 }
+
+export interface creditCrew extends celeb {
+  department: string;
+  job: string;
+}   
+
+export interface credits {
+    id: number;
+    cast: CreditCast[];
+    crew: creditCrew[];
+}
+
+export interface videos {
+    id: number;
+    results: video[];
+}
+
+export interface reviewResults {
+    id: number;
+    page: number;
+    results: reviews[];
+    total_pages: number;
+    total_results: number;
+}
+
+export interface celebDetails extends celeb {
+    birthday: string | null;
+    deathday: string | null;
+    biography: string;
+    place_of_birth: string | null;
+    homepage: string | null;
+}
+
+export interface celebCredits {
+    id: number;
+    cast: Array<movie | tvShow>;
+    crew: Array<movie | tvShow>;
+}                       
+
