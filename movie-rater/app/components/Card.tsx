@@ -1,5 +1,6 @@
 import { movie, tvShow } from "../types/tmdb";
 import { Star } from "lucide-react";
+import Link from "next/link";
 
 interface CardProps {
   movie?: movie;
@@ -16,6 +17,7 @@ export default function Card({ movie, tvShow }: CardProps) {
   if (!item) return null;
 
   return (
+    <Link href={movie ? `/movies/${movie.id}` : `/tv-shows/${tvShow?.id}`} passHref>
     <div className="group relative overflow-hidden rounded-lg bg-gray-900 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
       <div className="relative overflow-hidden">
         <img
@@ -43,5 +45,6 @@ export default function Card({ movie, tvShow }: CardProps) {
 
       <div className="absolute inset-0 rounded-lg border-2 border-purple-600/0 group-hover:border-purple-600/50 transition-all duration-300" />
     </div>
+    </Link>
   );
 }
