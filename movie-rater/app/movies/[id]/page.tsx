@@ -6,9 +6,7 @@ import {
   movie,
   credits,
   videos,
-  video,
   reviewResults,
-  reviews,
 } from "@/app/types/tmdb";
 import { get } from "@/app/lib/api";
 import Header from "@/app/components/Header";
@@ -18,13 +16,16 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import ReviewsCard from "@/app/components/ReviewsCard";
+import Card from "@/app/components/Card";
 
 export default function ContentPage() {
   const { id } = useParams();
   const [movie, setMovie] = useState<movie | null>(null);
   const [credits, setCredits] = useState<credits | null>(null);
   const [trailers, setTrailers] = useState<videos | null>(null);
-  const [movieReviews, setMovieReviews] = useState<reviews | null>(null);
+  const [movieReviews, setMovieReviews] = useState<reviewResults | null>(null);
+  const [similarMovies, setSimilarMovies] = useState<movie[] | null>(null);
   const [loading, setLoading] = useState(true);
 
   const allVideos = trailers ? trailers.results : [];
@@ -40,6 +41,9 @@ export default function ContentPage() {
       console.log("Fetching movie with ID:", id);
 
       try {
+        const similarMoviesResponse = await get(`/movie/${id}/similar?language=en-US&page=1`);
+        setSimilarMovies(similarMoviesResponse.results);
+
         const movieData = await get(`/movie/${id}?language=en-US`);
         setMovie(movieData);
 
@@ -271,8 +275,41 @@ export default function ContentPage() {
 )}
 
         {/* reviews sectionsal */}
-        <section className="container mx-auto px-4 mb-12">
-          
+        <section className="container mx-auto px-6 mb-12">
+          {movieReviews && movieReviews.results.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-200">Reviews</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+                {movieReviews.results.map((review) => (
+                  <ReviewsCard key={review.id} review={review} />
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* similar movies section */}
+        <section className="container mx-auto px-6 mb-12">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-200">Similar Movies</h2>
+          <Carousel>
+            <CarouselContent className="-ml-3 md:-ml-5">
+              {similarMovies && similarMovies.length > 0 && (
+                <>
+                  {similarMovies.map((similarMovie) => (
+                    <CarouselItem
+                      key={similarMovie.id}
+                      className="pl-2 md:pl-4  xl:basis-1/8"
+                    >
+                      
+                  <Card movie={similarMovie} />
+
+                    
+                    </CarouselItem>
+                  ))}
+                </>
+              )}
+            </CarouselContent>
+          </Carousel>
         </section>
 
         <Footer />
