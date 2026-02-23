@@ -1,4 +1,5 @@
 export interface movie {
+    runtime: any;
     id: number;
     title: string;
     overview: string;
@@ -23,6 +24,7 @@ export interface video {
     key: string;
     site: string;
     type: string;
+    official: boolean;
 }
 
 export interface celeb {
