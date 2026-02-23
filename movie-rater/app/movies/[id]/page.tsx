@@ -272,7 +272,7 @@ export default function ContentPage() {
 
         {/* reviews sectionsal */}
         <section className="container mx-auto px-4 mb-12">
-          {/* // Reviews insallah coming soon  */}
+          
         </section>
 
         <Footer />
