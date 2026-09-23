@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import {
   movie,
   credits,
@@ -27,6 +29,7 @@ export default function ContentPage() {
   const [movieReviews, setMovieReviews] = useState<reviewResults | null>(null);
   const [similarMovies, setSimilarMovies] = useState<movie[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showAllMovieReviews, setShowAllMovieReviews] = useState(false);
 
   const allVideos = trailers ? trailers.results : [];
   const mainTrailer = allVideos.find(video => video.type === "Trailer" && video.official) || allVideos[0];
@@ -198,7 +201,7 @@ export default function ContentPage() {
                       key={castMember.id}
                       className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"
                     >
-                      <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform cursor-grab active:cursor-grabbing">
+                      <Link href={`/celebs/${castMember.id}?returnTo=${encodeURIComponent(`/movies/${movie.id}`)}`} className="block bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform cursor-grab active:cursor-grabbing">
                         {castMember.profile_path ? (
                           <img
                             src={`https://image.tmdb.org/t/p/w300${castMember.profile_path}`}
@@ -218,7 +221,7 @@ export default function ContentPage() {
                             as {castMember.character}
                           </p>
                         </div>
-                      </div>
+                      </Link>
                     </CarouselItem>
                   ))}
                 </CarouselContent>
@@ -280,10 +283,21 @@ export default function ContentPage() {
             <div>
               <h2 className="text-2xl font-semibold mb-4 text-gray-200">Reviews</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
-                {movieReviews.results.map((review) => (
-                  <ReviewsCard key={review.id} review={review} />
+                {movieReviews.results.slice(0, showAllMovieReviews ? undefined : 3).map((review) => (
+                  <ReviewsCard key={review.id} review={review} returnTo={`/movies/${movie.id}`} />
                 ))}
               </div>
+              {movieReviews.results.length > 3 && (
+                <button
+                  type="button"
+                  aria-label={showAllMovieReviews ? "Show fewer reviews" : "Show all reviews"}
+                  title={showAllMovieReviews ? "Show fewer reviews" : "Show all reviews"}
+                  onClick={() => setShowAllMovieReviews((current) => !current)}
+                  className="mx-auto mt-6 flex text-gray-400 transition-all hover:scale-110 hover:text-purple-400"
+                >
+                  <ChevronDown className={`transition-transform ${showAllMovieReviews ? "rotate-180" : ""}`} size={30} />
+                </button>
+              )}
             </div>
           )}
         </section>
@@ -300,10 +314,8 @@ export default function ContentPage() {
                       key={similarMovie.id}
                       className="pl-2 md:pl-4  xl:basis-1/8"
                     >
-                      
                   <Card movie={similarMovie} />
 
-                    
                     </CarouselItem>
                   ))}
                 </>

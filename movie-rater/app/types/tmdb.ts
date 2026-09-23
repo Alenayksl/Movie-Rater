@@ -1,12 +1,12 @@
 export interface movie {
-    runtime: any;
+    runtime?: number;
     id: number;
     title: string;
     overview: string;
     poster_path: string;
     release_date: string;
     vote_average: number;
-    genres: { id: number; name: string; }[];
+    genres?: { id: number; name: string; }[];
 }
 
 export interface tvShow {
@@ -14,8 +14,13 @@ export interface tvShow {
     name: string;
     overview: string;
     poster_path: string;
+    backdrop_path?: string | null;
     first_air_date: string;
     vote_average: number;
+    genres?: { id: number; name: string; }[];
+    number_of_seasons?: number;
+    number_of_episodes?: number;
+    episode_run_time?: number[];
 }
 
 export interface video {

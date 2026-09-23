@@ -1,13 +1,19 @@
+"use client";
+
 import { celeb } from "../types/tmdb";
 import { User } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface CelebCardProps {
   celeb: celeb;
 }
 
 export default function CelebCard({ celeb }: CelebCardProps) {
+  const pathname = usePathname();
+
   return (
-    <div className="flex flex-col items-center group cursor-pointer">
+    <Link href={`/celebs/${celeb.id}?returnTo=${encodeURIComponent(pathname)}`} className="flex flex-col items-center group cursor-pointer">
       <div className="relative w-32 h-32 rounded-full overflow-hidden shadow-xl transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/50">
         {celeb.profile_path ? (
           <img
@@ -31,6 +37,6 @@ export default function CelebCard({ celeb }: CelebCardProps) {
           {celeb.known_for_department}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -1,12 +1,18 @@
+"use client";
+
 import { celeb } from "../types/tmdb";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface CelebInfoCardProps {
   celeb: celeb;
 }
 
 export default function CelebInfoCard({ celeb }: CelebInfoCardProps) {
+  const pathname = usePathname();
+
   return (
-    <div className="group relative overflow-hidden rounded-lg bg-gray-900 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
+    <Link href={`/celebs/${celeb.id}?returnTo=${encodeURIComponent(pathname)}`} className="group relative block overflow-hidden rounded-lg bg-gray-900 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
       <div className="relative overflow-hidden">
         {celeb.profile_path ? (
           <img
@@ -42,7 +48,7 @@ export default function CelebInfoCard({ celeb }: CelebInfoCardProps) {
       </div>
 
       <div className="absolute inset-0 rounded-lg border-2 border-purple-600/0 group-hover:border-purple-600/50 transition-all duration-300" />
-    </div>
+    </Link>
   );
 }
 
