@@ -136,7 +136,7 @@ export default function PopularMoviesPage() {
           
           {!loading && movies.length > 0 && (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 mb-8">
+              <div className="grid grid-cols-2 gap-7 mb-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5">
                 {movies.map((movie) => (
                   <Card key={movie.id} movie={movie} />
                 ))}

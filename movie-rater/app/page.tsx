@@ -22,17 +22,19 @@ export default function Home() {
   const [movies, setMovies] = useState<movie[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("today");
+  const [movieTab, setMovieTab] = useState("today");
+  const [tvTab, setTvTab] = useState("today");
+  const [videosTab, setVideosTab] = useState("movies");
   const [tvShows, setTvShows] = useState<tvShow[]>([]);
   const [videos, setVideos] = useState<(video & { movieTitle: string; movieId: number })[]>([]);
   const [celebs, setCelebs] = useState<celeb[]>([]);
   const [reviews, setReviews] = useState<reviews[]>([]);
 
-  async function getReviews() {
+  async function getReviews(movieList: movie[] = movies) {
     setLoading(true);
     setError(null);
     try {
-      const reviewsPromises = movies.slice(0, 10).map(async (movie) => {
+      const reviewsPromises = movieList.slice(0, 10).map(async (movie) => {
         try {
           const data = await get(`/movie/${movie.id}/reviews?language=en-US&page=1`);
           // Her review'a film bilgilerini ekle
@@ -151,13 +153,19 @@ export default function Home() {
     }
   }
 
-  async function getMovieListToday() {
+  async function getMovieListToday(loadRelatedSections = false) {
     setLoading(true);
     setError(null);
    try {
  const data = await get("/trending/movie/day?language=en-US");
    console.log(data);
    setMovies(data.results);
+   if (loadRelatedSections) {
+     await Promise.all([
+       getVideosForMovies(data.results),
+       getReviews(data.results),
+     ]);
+   }
     } catch (error) {
       console.error(error);
       setError("Failed to fetch movies.");
@@ -212,7 +220,7 @@ export default function Home() {
   }
 
    function handleTabChange(value: string) {
-    setActiveTab(value);
+    setMovieTab(value);
     if (value === "today") {
       getMovieListToday();
     } else if (value === "this_week") {
@@ -221,7 +229,7 @@ export default function Home() {
   } 
 
   async function handleTvTabChange(value: string) {
-    setActiveTab(value);
+    setTvTab(value);
     if (value === "today") {
       getTvShowListToday();
     } else if (value === "this_week") {
@@ -230,7 +238,7 @@ export default function Home() {
   }
 
   async function handleVideosTabChange(value: string) {
-    setActiveTab(value);
+    setVideosTab(value);
     if (value === "movies") {
       getVideosForMovies(movies);
     } else if (value === "tv_shows") {
@@ -243,33 +251,21 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    getMovieListToday();
+    getMovieListToday(true);
   }, []);
-
-  useEffect(() => {
-    if (movies.length > 0) {
-      getVideosForMovies(movies);
-    }
-  }, [movies]);
 
   useEffect(() => {
     getCelebs();
   }, []);
 
-  useEffect(() => {
-    if (movies.length > 0) {
-      getReviews();
-    }
-  }, [movies]);
-
   return (
-    <main className="min-h-screen pt-20 px-6">
+    <main className="min-h-screen bg-gray-950 pt-20">
       <Header />
-<div style = {{backgroundImage: 'url(/icons/video-background.png)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="mb-4 px-4 sm:px-6 lg:px-8" style = {{backgroundImage: 'url(/icons/video-background.png)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
 {/* self note: video-background video alanında background olarak kullanılacak. */}
- <div className="mr-auto ml-auto mt-5 w-full max-w-5xl">
+ <div className="container mx-auto mt-5 w-full max-w-7xl pt-8">
         <h1 className="text-white text-3xl font-bold mb-4">Trending Trailers</h1>
-        <Tabs defaultValue="movies" onValueChange={handleVideosTabChange}>
+        <Tabs value={videosTab} onValueChange={handleVideosTabChange}>
           <TabsList className="justify-center mb-8 bg-gray-900 border border-purple-700 rounded-full p-1">
             <TabsTrigger 
               className="text-gray-400 hover:text-white rounded-full data-[state=active]:bg-purple-800 data-[state=active]:text-white transition-all px-6 py-2" 
@@ -286,12 +282,12 @@ export default function Home() {
           </TabsList>
         </Tabs>
       </div>
-      <div className="container mx-auto mb-16">
+      <div className="container mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {videos.length > 0 && (
           <div className="relative">            
-            <Carousel className="w-full max-w-5xl mx-auto">
+            <Carousel fadeEdges className="mx-auto w-full max-w-7xl">
               <CarouselContent className="-ml-4">
                 {videos.map((video) => (
                   <CarouselItem key={video.id} className="lg:basis-1/3 md:basis-1/2 basis-1 p-4">
@@ -299,17 +295,17 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/2 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/2 -right-16" />
+              <CarouselPrevious className="-left-3 top-1/2 z-30 bg-transparent text-white md:-left-16" />
+              <CarouselNext className="-right-3 top-1/2 z-30 bg-transparent text-white md:-right-16" />
             </Carousel>
           </div>
         )}
       </div>
       </div>
 
-      <div className="mr-auto ml-auto mt-5 w-full max-w-5xl">
+      <div className="container mx-auto mt-12 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-white text-3xl font-bold mb-4">Trending Movies</h1>
-        <Tabs defaultValue={activeTab} onValueChange={handleTabChange}>
+        <Tabs value={movieTab} onValueChange={handleTabChange}>
           <TabsList className="justify-center mb-8 bg-gray-900 border border-purple-700 rounded-full p-1">
             <TabsTrigger 
               className="text-gray-400 hover:text-white rounded-full data-[state=active]:bg-purple-800 data-[state=active]:text-white transition-all px-6 py-2" 
@@ -326,12 +322,12 @@ export default function Home() {
           </TabsList>
         </Tabs>
       </div>
-      <div className="container mx-auto ">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {movies.length > 0 && (
           <div className="relative">            
-            <Carousel className="w-full max-w-5xl mx-auto">
+            <Carousel fadeEdges className="mx-auto w-full max-w-7xl">
               <CarouselContent className="-ml-4">
                 {movies.map((movie) => (
                   <CarouselItem key={movie.id} className="lg:basis-1/6 md:basis-1/4 sm:basis-1/3 basis-1/2 p-4">
@@ -339,16 +335,16 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/3 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/3 -right-16" />
+              <CarouselPrevious className="-left-3 top-1/3 z-30 bg-transparent text-white md:-left-16" />
+              <CarouselNext className="-right-3 top-1/3 z-30 bg-transparent text-white md:-right-16" />
             </Carousel>
           </div>
         )}
       </div>
 
-      <div className="mr-auto ml-auto mt-16 w-full max-w-5xl">
+      <div className="container mx-auto mt-20 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-white text-3xl font-bold mb-4">Trending TV Shows</h1>
-        <Tabs defaultValue={activeTab} onValueChange={handleTvTabChange}>
+        <Tabs value={tvTab} onValueChange={handleTvTabChange}>
           <TabsList className="justify-center mb-8 bg-gray-900 border border-purple-700 rounded-full p-1">
             <TabsTrigger 
               className="text-gray-400 hover:text-white rounded-full data-[state=active]:bg-purple-800 data-[state=active]:text-white transition-all px-6 py-2" 
@@ -365,12 +361,12 @@ export default function Home() {
           </TabsList>
         </Tabs>
       </div>
-      <div className="container mx-auto mb-16">
+      <div className="container mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {tvShows.length > 0 && (
           <div className="relative">            
-            <Carousel className="w-full max-w-5xl mx-auto">
+            <Carousel fadeEdges className="mx-auto w-full max-w-7xl">
               <CarouselContent className="-ml-4">
                 {tvShows.map((tvShow) => (
                   <CarouselItem key={tvShow.id} className="lg:basis-1/6 md:basis-1/4 sm:basis-1/3 basis-1/2 p-4">
@@ -385,22 +381,22 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/3 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/3 -right-16" />
+              <CarouselPrevious className="-left-3 top-1/3 z-30 bg-transparent text-white md:-left-16" />
+              <CarouselNext className="-right-3 top-1/3 z-30 bg-transparent text-white md:-right-16" />
             </Carousel>
           </div>
         )}
       </div>
 
-      <div className="mr-auto ml-auto mt-16 w-full max-w-5xl">
+      <div className="container mx-auto mt-20 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-white text-3xl font-bold mb-4">Popular Celebrities</h1>
       </div>
-      <div className="container mx-auto mb-16">
+      <div className="container mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {celebs.length > 0 && (
           <div className="relative">            
-            <Carousel className="w-full max-w-5xl mx-auto">
+            <Carousel fadeEdges className="mx-auto w-full max-w-7xl">
               <CarouselContent className="-ml-4">
                 {celebs.map((celeb) => (
                   <CarouselItem key={celeb.id} className="lg:basis-1/6 md:basis-1/5 sm:basis-1/4 basis-1/3 p-4">
@@ -408,30 +404,30 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/2 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/2 -right-16" />
+              <CarouselPrevious className="-left-3 top-1/2 z-30 bg-transparent text-white md:-left-16" />
+              <CarouselNext className="-right-3 top-1/2 z-30 bg-transparent text-white md:-right-16" />
             </Carousel>
           </div>
         )}
       </div>
 
-      <div className="mr-auto ml-auto mt-16 w-full max-w-5xl">
+      <div className="container mx-auto mt-20 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-white text-3xl font-bold mb-4">Latest Reviews</h1>
       </div>
-      <div className="container mx-auto mb-16">
+      <div className="container mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
         {error && <p className="text-red-500 text-center">{error}</p>} 
         {reviews.length > 0 && (
           <div className="relative">            
-            <Carousel className="w-full max-w-5xl mx-auto">
+            <Carousel fadeEdges className="mx-auto w-full max-w-7xl">
               <CarouselContent className="-ml-4">
                 {reviews.map((review) => (
                   <CarouselItem key={review.id} className="lg:basis-1/3 md:basis-1/2 basis-1 p-4">
-                    <ReviewsCard review={review} />
+                    <ReviewsCard review={review} returnTo="/" />
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/2 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/2 -right-16" />
+              <CarouselPrevious className="-left-3 top-1/2 z-30 bg-transparent text-white md:-left-16" />
+              <CarouselNext className="-right-3 top-1/2 z-30 bg-transparent text-white md:-right-16" />
             </Carousel>
           </div>
         )}

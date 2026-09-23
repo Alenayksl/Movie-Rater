@@ -1,5 +1,7 @@
 import { movie, tvShow } from "../types/tmdb";
 import { Star } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 interface CardProps {
   movie?: movie;
@@ -8,19 +10,25 @@ interface CardProps {
 
 export default function Card({ movie, tvShow }: CardProps) {
   // Her iki type için ortak değerleri alıyoruz
-  const item = movie || tvShow;
-  const title = movie ? movie.title : tvShow?.name;
-  const date = movie ? movie.release_date : tvShow?.first_air_date;
-  
 
+  const isMovie = !!movie;
+  const item = isMovie ? movie : tvShow;
+  const title = isMovie ? movie!.title : tvShow!.name;
+  const date = isMovie ? movie!.release_date : tvShow!.first_air_date;
+  const detailPath = isMovie ? `/movies/${movie!.id}` : `/tv/${tvShow!.id}`;
+
+  
   if (!item) return null;
 
   return (
+    <Link href={detailPath} passHref>
     <div className="group relative overflow-hidden rounded-lg bg-gray-900 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
       <div className="relative overflow-hidden">
-        <img
+        <Image
           src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
           alt={title}
+          width={500}
+          height={225}
           className="w-full h-[225px] object-cover transition-transform duration-300 group-hover:scale-110"
         />
 
@@ -43,5 +51,6 @@ export default function Card({ movie, tvShow }: CardProps) {
 
       <div className="absolute inset-0 rounded-lg border-2 border-purple-600/0 group-hover:border-purple-600/50 transition-all duration-300" />
     </div>
+    </Link>
   );
 }

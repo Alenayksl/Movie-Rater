@@ -1,11 +1,14 @@
 import { reviews } from "../types/tmdb";
 import { User, MessageSquare, Star, ExternalLink } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 interface ReviewsCardProps {
   review: reviews;
+  returnTo?: string;
 }
 
-export default function ReviewsCard({ review }: ReviewsCardProps) {
+export default function ReviewsCard({ review, returnTo = "/" }: ReviewsCardProps) {
   const avatarUrl = review.author_details.avatar_path
     ? review.author_details.avatar_path.startsWith('/https')
       ? review.author_details.avatar_path.substring(1)
@@ -16,15 +19,22 @@ export default function ReviewsCard({ review }: ReviewsCardProps) {
     ? `https://image.tmdb.org/t/p/w200${review.moviePosterPath}`
     : null;
 
+  const reviewParams = new URLSearchParams();
+  if (review.movieTitle) reviewParams.set("movieTitle", review.movieTitle);
+  reviewParams.set("returnTo", returnTo);
+  const reviewHref = `/reviews/${review.id}?${reviewParams.toString()}`;
+
   return (
     <div className="group relative overflow-hidden rounded-xl bg-linear-to-br from-gray-900 to-gray-950 shadow-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/30 h-full flex flex-col">
       {/* Movie Poster and Title */}
       {review.movieTitle && (
         <div className="relative h-48 overflow-hidden">
           {posterUrl ? (
-            <img
+            <Image
               src={posterUrl}
               alt={review.movieTitle}
+              width={200}
+              height={192}
               className="w-full h-full object-cover"
             />
           ) : (
@@ -45,9 +55,11 @@ export default function ReviewsCard({ review }: ReviewsCardProps) {
           {/* Avatar */}
           <div className="shrink-0">
             {avatarUrl ? (
-              <img
+              <Image
                 src={avatarUrl}
                 alt={review.author_details.username}
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-500/50"
               />
             ) : (
@@ -77,7 +89,7 @@ export default function ReviewsCard({ review }: ReviewsCardProps) {
       </div>
 
       {/* Review Content */}
-      <div className="p-4 space-y-3 flex-1">
+      <div className="flex-1 space-y-3 p-4">
         <div className="flex items-start gap-2">
           <MessageSquare className="w-4 h-4 text-purple-400 mt-1 shrink-0" />
           <p className="text-gray-300 text-sm leading-relaxed line-clamp-4">
@@ -88,15 +100,13 @@ export default function ReviewsCard({ review }: ReviewsCardProps) {
 
       {/* Footer */}
       <div className="p-4 pt-0">
-        <a
-          href={review.url}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href={reviewHref}
           className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors group/link"
         >
           Read Full Review
           <ExternalLink className="w-4 h-4 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-        </a>
+        </Link>
       </div>
 
       {/* Border glow effect */}

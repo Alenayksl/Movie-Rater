@@ -19,6 +19,7 @@ type CarouselProps = {
   plugins?: CarouselPlugin
   orientation?: "horizontal" | "vertical"
   setApi?: (api: CarouselApi) => void
+  fadeEdges?: boolean
 }
 
 type CarouselContextProps = {
@@ -47,6 +48,7 @@ function Carousel({
   opts,
   setApi,
   plugins,
+  fadeEdges = false,
   className,
   children,
   ...props
@@ -126,6 +128,12 @@ function Carousel({
         data-slot="carousel"
         {...props}
       >
+        {fadeEdges && orientation === "horizontal" && (
+          <>
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-5 bg-gradient-to-r from-gray-950 to-transparent sm:w-8 md:w-16" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-5 bg-gradient-to-l from-gray-950 to-transparent sm:w-8 md:w-16" />
+          </>
+        )}
         {children}
       </div>
     </CarouselContext.Provider>

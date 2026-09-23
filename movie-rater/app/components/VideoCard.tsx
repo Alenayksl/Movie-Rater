@@ -29,7 +29,7 @@ export default function VideoCard({ video }: VideoCardProps) {
       </div>
 
       {/* Content section */}
-      <div className="p-4 space-y-2 bg-gradient-to-b from-gray-900 to-gray-950">
+      <div className="space-y-2 bg-linear-to-b from-gray-900 to-gray-950 p-4">
         <h2 className="text-white font-bold text-base line-clamp-1 group-hover:text-purple-400 transition-colors duration-300">
           {video.movieTitle}
         </h2>
