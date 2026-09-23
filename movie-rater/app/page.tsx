@@ -259,11 +259,11 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen pt-20 px-6">
+    <main className="min-h-screen bg-gray-950 pt-20">
       <Header />
-<div style = {{backgroundImage: 'url(/icons/video-background.png)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="mb-4 px-4 sm:px-6 lg:px-8" style = {{backgroundImage: 'url(/icons/video-background.png)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
 {/* self note: video-background video alanında background olarak kullanılacak. */}
- <div className="mr-auto ml-auto mt-5 w-full max-w-5xl">
+ <div className="container mx-auto mt-5 w-full max-w-7xl pt-8">
         <h1 className="text-white text-3xl font-bold mb-4">Trending Trailers</h1>
         <Tabs value={videosTab} onValueChange={handleVideosTabChange}>
           <TabsList className="justify-center mb-8 bg-gray-900 border border-purple-700 rounded-full p-1">
@@ -282,12 +282,12 @@ export default function Home() {
           </TabsList>
         </Tabs>
       </div>
-      <div className="container mx-auto mb-16">
+      <div className="container mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {videos.length > 0 && (
           <div className="relative">            
-            <Carousel className="w-full max-w-5xl mx-auto">
+            <Carousel fadeEdges className="mx-auto w-full max-w-7xl">
               <CarouselContent className="-ml-4">
                 {videos.map((video) => (
                   <CarouselItem key={video.id} className="lg:basis-1/3 md:basis-1/2 basis-1 p-4">
@@ -295,15 +295,15 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/2 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/2 -right-16" />
+              <CarouselPrevious className="-left-3 top-1/2 z-30 bg-transparent text-white md:-left-16" />
+              <CarouselNext className="-right-3 top-1/2 z-30 bg-transparent text-white md:-right-16" />
             </Carousel>
           </div>
         )}
       </div>
       </div>
 
-      <div className="mr-auto ml-auto mt-5 w-full max-w-5xl">
+      <div className="container mx-auto mt-12 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-white text-3xl font-bold mb-4">Trending Movies</h1>
         <Tabs value={movieTab} onValueChange={handleTabChange}>
           <TabsList className="justify-center mb-8 bg-gray-900 border border-purple-700 rounded-full p-1">
@@ -322,12 +322,12 @@ export default function Home() {
           </TabsList>
         </Tabs>
       </div>
-      <div className="container mx-auto ">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {movies.length > 0 && (
           <div className="relative">            
-            <Carousel className="w-full max-w-5xl mx-auto">
+            <Carousel fadeEdges className="mx-auto w-full max-w-7xl">
               <CarouselContent className="-ml-4">
                 {movies.map((movie) => (
                   <CarouselItem key={movie.id} className="lg:basis-1/6 md:basis-1/4 sm:basis-1/3 basis-1/2 p-4">
@@ -335,14 +335,14 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/3 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/3 -right-16" />
+              <CarouselPrevious className="-left-3 top-1/3 z-30 bg-transparent text-white md:-left-16" />
+              <CarouselNext className="-right-3 top-1/3 z-30 bg-transparent text-white md:-right-16" />
             </Carousel>
           </div>
         )}
       </div>
 
-      <div className="mr-auto ml-auto mt-16 w-full max-w-5xl">
+      <div className="container mx-auto mt-20 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-white text-3xl font-bold mb-4">Trending TV Shows</h1>
         <Tabs value={tvTab} onValueChange={handleTvTabChange}>
           <TabsList className="justify-center mb-8 bg-gray-900 border border-purple-700 rounded-full p-1">
@@ -361,12 +361,12 @@ export default function Home() {
           </TabsList>
         </Tabs>
       </div>
-      <div className="container mx-auto mb-16">
+      <div className="container mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {tvShows.length > 0 && (
           <div className="relative">            
-            <Carousel className="w-full max-w-5xl mx-auto">
+            <Carousel fadeEdges className="mx-auto w-full max-w-7xl">
               <CarouselContent className="-ml-4">
                 {tvShows.map((tvShow) => (
                   <CarouselItem key={tvShow.id} className="lg:basis-1/6 md:basis-1/4 sm:basis-1/3 basis-1/2 p-4">
@@ -381,22 +381,22 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/3 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/3 -right-16" />
+              <CarouselPrevious className="-left-3 top-1/3 z-30 bg-transparent text-white md:-left-16" />
+              <CarouselNext className="-right-3 top-1/3 z-30 bg-transparent text-white md:-right-16" />
             </Carousel>
           </div>
         )}
       </div>
 
-      <div className="mr-auto ml-auto mt-16 w-full max-w-5xl">
+      <div className="container mx-auto mt-20 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-white text-3xl font-bold mb-4">Popular Celebrities</h1>
       </div>
-      <div className="container mx-auto mb-16">
+      <div className="container mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         {celebs.length > 0 && (
           <div className="relative">            
-            <Carousel className="w-full max-w-5xl mx-auto">
+            <Carousel fadeEdges className="mx-auto w-full max-w-7xl">
               <CarouselContent className="-ml-4">
                 {celebs.map((celeb) => (
                   <CarouselItem key={celeb.id} className="lg:basis-1/6 md:basis-1/5 sm:basis-1/4 basis-1/3 p-4">
@@ -404,21 +404,21 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/2 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/2 -right-16" />
+              <CarouselPrevious className="-left-3 top-1/2 z-30 bg-transparent text-white md:-left-16" />
+              <CarouselNext className="-right-3 top-1/2 z-30 bg-transparent text-white md:-right-16" />
             </Carousel>
           </div>
         )}
       </div>
 
-      <div className="mr-auto ml-auto mt-16 w-full max-w-5xl">
+      <div className="container mx-auto mt-20 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-white text-3xl font-bold mb-4">Latest Reviews</h1>
       </div>
-      <div className="container mx-auto mb-16">
+      <div className="container mx-auto mb-16 max-w-7xl px-4 sm:px-6 lg:px-8">
         {error && <p className="text-red-500 text-center">{error}</p>} 
         {reviews.length > 0 && (
           <div className="relative">            
-            <Carousel className="w-full max-w-5xl mx-auto">
+            <Carousel fadeEdges className="mx-auto w-full max-w-7xl">
               <CarouselContent className="-ml-4">
                 {reviews.map((review) => (
                   <CarouselItem key={review.id} className="lg:basis-1/3 md:basis-1/2 basis-1 p-4">
@@ -426,8 +426,8 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-transparent text-white z-30 top-1/2 -left-16" />
-              <CarouselNext className="bg-transparent text-white z-30 top-1/2 -right-16" />
+              <CarouselPrevious className="-left-3 top-1/2 z-30 bg-transparent text-white md:-left-16" />
+              <CarouselNext className="-right-3 top-1/2 z-30 bg-transparent text-white md:-right-16" />
             </Carousel>
           </div>
         )}

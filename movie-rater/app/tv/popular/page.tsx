@@ -39,19 +39,20 @@ export default function PopularTv() {
     let endPoint = "";
 
     if (hasFilters) {
-      params.append("sort_by", sortBy);
+      params.append("sort_by", sortBy.replace("primary_release_date", "first_air_date"));
       if (selectedGenres.length > 0) {
       params.append("with_genres", selectedGenres.join(","));
     }
     if (selectedPlatforms.length > 0) {
       params.append("with_watch_providers", selectedPlatforms.join(","));
       params.append("watch_region", selectedCountry || "US");
+      params.append("with_watch_monetization_types", "flatrate");
     }
     if (selectedYear) {
-      params.append("primary_release_year", selectedYear.toString());
+      params.append("first_air_date_year", selectedYear.toString());
     }
     if (selectedCountry) {
-      params.append("region", selectedCountry);
+      params.append("with_origin_country", selectedCountry);
     }
   if (selectedLanguage) {
     params.append("with_original_language", selectedLanguage);
@@ -140,7 +141,7 @@ export default function PopularTv() {
         {error && <p className="text-red-500 text-center">{error}</p>}
         {tvShows.length > 0 && (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 mb-8">
+            <div className="grid grid-cols-2 gap-7 mb-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5">
                 {tvShows.map((show) => (
                     <Card key={show.id} tvShow={show} />
                 ))}
