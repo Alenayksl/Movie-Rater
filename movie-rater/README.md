@@ -68,16 +68,19 @@ app/
 components/ui/      Reusable UI primitives such as tabs and carousels
 public/images/      Local project images served from /images/* (.png)
 app/public/icons/   Existing application icon assets
+```
 
 ## Project Images
 
-Current images:
+The project screenshots are stored in `public/images/` and can be previewed here:
 
-- `cinebookmainpage.png`
-- `cinebookmovieidpage.png`
-- `cinebookpopularmovies.png`
-- `cinebookreviewspage.png`
-```
+![CineBook main page](public/images/cinebookmainpage.png)
+
+![CineBook movie detail page](public/images/cinebookmovieidpage.png)
+
+![CineBook popular movies page](public/images/cinebookpopularmovies.png)
+
+![CineBook reviews page](public/images/cinebookreviewspage.png)
 
 ## TMDB API
 
