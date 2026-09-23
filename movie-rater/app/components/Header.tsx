@@ -1,6 +1,7 @@
-import { LucideVideo, Search, ChevronDown} from "lucide-react";
+import { LucideVideo, ChevronDown} from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import Search from "./Search";
 
 export default function Header() {
 
@@ -104,14 +105,7 @@ export default function Header() {
 
 
         <div className="flex items-center gap-3 ml-auto">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-600" size={18} />
-            <input 
-              type="text"
-              placeholder="Search..."
-              className="bg-black border border-gray-600 rounded-3xl pl-10 pr-4 py-1 text-white focus:outline-none focus:border-white"
-            />
-          </div>
+          <Search />
         </div>
 <div className="absolute bottom-0 left-0 w-full h-0.5 bg-linear-to-r from-purple-800 to-purple-950"></div>
 
