@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 import { credits, reviewResults, tvShow, videos } from "../../types/tmdb";
 import { get } from "@/app/lib/api";
 import Header from "@/app/components/Header";
@@ -87,9 +88,11 @@ export default function TvContentPage(){
                 <div className="flex flex-col gap-8 md:flex-row">
                     <div className="shrink-0">
                         {show.poster_path ? (
-                            <img
+                            <Image
                                 src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
                                 alt={show.name}
+                                width={500}
+                                height={384}
                                 className="h-96 w-64 rounded-lg object-cover shadow-2xl"
                             />
                         ) : (
@@ -154,7 +157,7 @@ export default function TvContentPage(){
                                     <CarouselItem key={castMember.id} className="basis-1/2 pl-2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 md:pl-4">
                                         <Link href={`/celebs/${castMember.id}?returnTo=${encodeURIComponent(`/tv/${show.id}`)}`} className="block overflow-hidden rounded-lg bg-gray-800 shadow-lg transition-transform hover:scale-105">
                                             {castMember.profile_path ? (
-                                                <img src={`https://image.tmdb.org/t/p/w300${castMember.profile_path}`} alt={castMember.name} className="h-64 w-full object-cover" />
+                                                <Image src={`https://image.tmdb.org/t/p/w300${castMember.profile_path}`} alt={castMember.name} width={300} height={256} className="h-64 w-full object-cover" />
                                             ) : (
                                                 <div className="flex h-64 items-center justify-center bg-gray-700 text-gray-500">No Image</div>
                                             )}

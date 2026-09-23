@@ -3,6 +3,7 @@
 import { celeb } from "../types/tmdb";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 interface CelebInfoCardProps {
   celeb: celeb;
@@ -15,9 +16,11 @@ export default function CelebInfoCard({ celeb }: CelebInfoCardProps) {
     <Link href={`/celebs/${celeb.id}?returnTo=${encodeURIComponent(pathname)}`} className="group relative block overflow-hidden rounded-lg bg-gray-900 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
       <div className="relative overflow-hidden">
         {celeb.profile_path ? (
-          <img
+          <Image
             src={`https://image.tmdb.org/t/p/w500${celeb.profile_path}`}
             alt={celeb.name}
+            width={500}
+            height={225}
             className="w-full h-[225px] object-cover transition-transform duration-300 group-hover:scale-110"
           />
         ) : (

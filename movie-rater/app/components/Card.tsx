@@ -1,6 +1,7 @@
 import { movie, tvShow } from "../types/tmdb";
 import { Star } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface CardProps {
   movie?: movie;
@@ -23,9 +24,11 @@ export default function Card({ movie, tvShow }: CardProps) {
     <Link href={detailPath} passHref>
     <div className="group relative overflow-hidden rounded-lg bg-gray-900 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
       <div className="relative overflow-hidden">
-        <img
+        <Image
           src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
           alt={title}
+          width={500}
+          height={225}
           className="w-full h-[225px] object-cover transition-transform duration-300 group-hover:scale-110"
         />
 

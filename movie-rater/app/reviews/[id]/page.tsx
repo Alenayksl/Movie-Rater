@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { ArrowLeft, ExternalLink, Star, User } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { get } from "@/app/lib/api";
@@ -69,7 +70,7 @@ export default function ReviewPage() {
         <article className="overflow-hidden rounded-xl border border-gray-800 bg-gray-900 shadow-2xl">
           <header className="mb-8 flex items-start gap-4 border-b border-gray-800 px-6 pb-6 pt-6 md:px-10 md:pt-10">
             {avatarUrl ? (
-              <img src={avatarUrl} alt={review.author_details.username || review.author} className="h-14 w-14 rounded-full object-cover" />
+              <Image src={avatarUrl} alt={review.author_details.username || review.author} width={56} height={56} className="h-14 w-14 rounded-full object-cover" />
             ) : (
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-purple-800">
                 <User size={24} />

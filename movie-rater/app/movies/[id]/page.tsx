@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 import {
   movie,
   credits,
@@ -93,10 +94,12 @@ export default function ContentPage() {
       <section className="container mx-auto px-4 -mt-110 relative z-20 mb-12">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Postersel */}
-          <div className="flex-shrink-0">
-            <img
+          <div className="shrink-0">
+            <Image
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}
+              width={500}
+              height={384}
               className="w-64 h-96 object-cover rounded-lg shadow-2xl"
             />
           </div>
@@ -203,9 +206,11 @@ export default function ContentPage() {
                     >
                       <Link href={`/celebs/${castMember.id}?returnTo=${encodeURIComponent(`/movies/${movie.id}`)}`} className="block bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform cursor-grab active:cursor-grabbing">
                         {castMember.profile_path ? (
-                          <img
+                          <Image
                             src={`https://image.tmdb.org/t/p/w300${castMember.profile_path}`}
                             alt={castMember.name}
+                            width={300}
+                            height={256}
                             className="w-full h-64 object-cover"
                           />
                         ) : (

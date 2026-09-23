@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import Card from "@/app/components/Card";
@@ -69,9 +70,11 @@ export default function CelebDetailsPage() {
         <div className="flex flex-col gap-8 md:flex-row">
           <div className="shrink-0">
             {celeb.profile_path ? (
-              <img
+              <Image
                 src={`https://image.tmdb.org/t/p/h632${celeb.profile_path}`}
                 alt={celeb.name}
+                width={288}
+                height={420}
                 className="h-[420px] w-72 rounded-lg object-cover shadow-2xl"
               />
             ) : (

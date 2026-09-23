@@ -5,6 +5,7 @@ import { Search as SearchIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { get } from "@/app/lib/api";
+import Image from "next/image";
 
 interface SearchResult {
   id: number;
@@ -81,9 +82,11 @@ export default function Search() {
               className="flex items-center gap-3 px-3 py-2 transition-colors hover:bg-purple-900"
             >
               {result.poster_path || result.profile_path ? (
-                <img
+                <Image
                   src={`https://image.tmdb.org/t/p/w92${result.poster_path || result.profile_path}`}
                   alt=""
+                  width={92}
+                  height={48}
                   className="h-12 w-9 shrink-0 rounded object-cover"
                 />
               ) : (

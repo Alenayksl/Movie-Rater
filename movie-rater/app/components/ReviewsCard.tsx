@@ -1,6 +1,7 @@
 import { reviews } from "../types/tmdb";
 import { User, MessageSquare, Star, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface ReviewsCardProps {
   review: reviews;
@@ -29,9 +30,11 @@ export default function ReviewsCard({ review, returnTo = "/" }: ReviewsCardProps
       {review.movieTitle && (
         <div className="relative h-48 overflow-hidden">
           {posterUrl ? (
-            <img
+            <Image
               src={posterUrl}
               alt={review.movieTitle}
+              width={200}
+              height={192}
               className="w-full h-full object-cover"
             />
           ) : (
@@ -52,9 +55,11 @@ export default function ReviewsCard({ review, returnTo = "/" }: ReviewsCardProps
           {/* Avatar */}
           <div className="shrink-0">
             {avatarUrl ? (
-              <img
+              <Image
                 src={avatarUrl}
                 alt={review.author_details.username}
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-500/50"
               />
             ) : (
